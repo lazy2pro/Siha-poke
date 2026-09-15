@@ -1,0 +1,14 @@
+# Unity 생성 임시 파일 및 캐시 제외
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+
+# Visual Studio / IDE 설정 파일
+/.vs/
+/*.csproj
+/*.unityproj
+/*.sln
