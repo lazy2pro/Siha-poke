@@ -7,7 +7,9 @@ import './style.css'
 
 const LOW_POWER_DEVICE=/Android/i.test(navigator.userAgent)
 let musicTimer:number|undefined,musicContext:AudioContext|undefined
-function speak(text:string,rate=1,pitch=1){try{if(!('speechSynthesis' in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='ko-KR';u.rate=rate;u.pitch=pitch;const voice=window.speechSynthesis.getVoices().find(v=>v.lang.toLowerCase().startsWith('ko'));if(voice)u.voice=voice;window.speechSynthesis.speak(u)}catch{}}
+let activeVoice:HTMLAudioElement|undefined
+const voiceCache=new Map<string,string>()
+async function speak(text:string,_rate=1,pitch=1){try{activeVoice?.pause();const voice=pitch>1.1?'coral':pitch<1?'sage':'marin',key=voice+text;let src=voiceCache.get(key);if(!src){const response=await fetch('/api/tts?voice='+encodeURIComponent(voice)+'&text='+encodeURIComponent(text));if(!response.ok)throw new Error('tts unavailable');src=URL.createObjectURL(await response.blob());voiceCache.set(key,src)}const audio=new Audio(src);activeVoice=audio;await audio.play()}catch{}}
 function startMusic(stage:number){try{if(musicTimer)window.clearInterval(musicTimer);const Ctx=window.AudioContext||(window as typeof window & {webkitAudioContext?:typeof AudioContext}).webkitAudioContext;if(!Ctx)return;musicContext??=new Ctx();musicContext.resume();const scales=[[262,330,392,523],[294,370,440,587],[330,415,494,659],[349,440,523,698],[392,494,587,784]][stage-1]||[262,330,392,523];let step=0;const play=()=>{const osc=musicContext!.createOscillator(),gain=musicContext!.createGain(),t=musicContext!.currentTime;osc.type='sine';osc.frequency.value=scales[step++%scales.length];gain.gain.setValueAtTime(.018,t);gain.gain.exponentialRampToValueAtTime(.001,t+.65);osc.connect(gain).connect(musicContext!.destination);osc.start(t);osc.stop(t+.7)};play();musicTimer=window.setInterval(play,780)}catch{}}
 
 type CharacterDefinition = { id:string; name:string; emoji:string; color:string; accent:string; shape:'round'|'leaf'|'flame'|'cloud'; hello:string; guide:string; quizLead:string }
