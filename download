@@ -1,0 +1,17 @@
+# Dependencies and generated output
+node_modules/
+dist/
+*.tsbuildinfo
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Vercel's local project metadata
+.vercel/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
