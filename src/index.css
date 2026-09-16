@@ -1,0 +1,206 @@
+* {
+  box-sizing: border-box;
+  user-select: none;
+  margin: 0;
+  padding: 0;
+}
+
+body, html, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Jua', sans-serif;
+  background: #80deea;
+}
+
+.game-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: linear-gradient(180deg, #4dd0e1 0%, #b2ebf2 100%);
+}
+
+.hud-top {
+  width: 100%;
+  max-width: 900px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 10;
+}
+
+.era-badge {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  color: #ffffff;
+  font-size: 28px;
+  padding: 8px 34px;
+  border-radius: 30px;
+  box-shadow: 0 5px 0 #e65100, 0 8px 15px rgba(0,0,0,0.15);
+  border: 3px solid #fff;
+}
+
+.question-box {
+  background: rgba(255, 255, 255, 0.98);
+  border: 5px solid #ffca28;
+  border-radius: 22px;
+  padding: 16px 28px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.question-text {
+  font-size: 25px;
+  color: #263238;
+  line-height: 1.35;
+  word-break: keep-all;
+}
+
+.stage-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  flex-grow: 1;
+  margin: 10px 0;
+  background: #a5d6a7;
+  border-radius: 24px;
+  border: 6px solid #00acc1;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.building-card {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
+  max-width: 500px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 4px solid #0277bd;
+  border-radius: 22px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+  z-index: 5;
+}
+
+.building-img {
+  width: 160px;
+  height: 110px;
+  object-fit: contain;
+  margin-bottom: 5px;
+}
+
+.building-title {
+  font-size: 22px;
+  color: #0277bd;
+  font-weight: bold;
+}
+
+.track-line {
+  position: absolute;
+  bottom: 30px;
+  width: 88%;
+  height: 110px;
+  background: #fff59d;
+  border: 5px solid #fbc02d;
+  border-radius: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+}
+
+.side-pokemon {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.2));
+}
+
+.hero-pikachu {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 120px;
+  transition: left 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 8;
+}
+
+.hero-pikachu.left { left: 18%; }
+.hero-pikachu.center { left: 50%; }
+.hero-pikachu.right { left: 82%; }
+
+.hero-pikachu img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 12px rgba(0,0,0,0.3));
+}
+
+.controls-bottom {
+  width: 100%;
+  max-width: 920px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  z-index: 10;
+}
+
+.choice-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-radius: 24px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 0 rgba(0,0,0,0.15);
+  color: white;
+  font-family: 'Jua', sans-serif;
+}
+
+.choice-btn.left {
+  background: linear-gradient(135deg, #0288d1, #03a9f4);
+  border: 4px solid #b3e5fc;
+}
+
+.choice-btn.right {
+  background: linear-gradient(135deg, #f4511e, #ff7043);
+  border: 4px solid #ffccbc;
+}
+
+.cue-icon {
+  font-size: 38px;
+  background: rgba(255, 255, 255, 0.25);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-wrap {
+  display: flex;
+  flex-direction: column;
+  margin: 0 12px;
+}
+
+.dir-label { font-size: 16px; opacity: 0.95; }
+.ans-text { font-size: 23px; font-weight: bold; margin-top: 2px; }
