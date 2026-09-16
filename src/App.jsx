@@ -2,7 +2,53 @@ import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
 import './index.css';
 
-// 인터넷에서 바로 고화질 이미지를 불러오는 7대 역사 퀴즈 데이터
+// 3D 입체 건물 그래픽 (SVG 내장 - 엑박 절대 없음)
+const BuildingVisuals = {
+  dolmen: (
+    <svg width="140" height="90" viewBox="0 0 140 90">
+      <rect x="30" y="45" width="20" height="35" fill="#78909c" rx="4"/>
+      <rect x="90" y="45" width="20" height="35" fill="#78909c" rx="4"/>
+      <ellipse cx="70" cy="35" rx="60" ry="20" fill="#b0bec5" stroke="#455a64" strokeWidth="4"/>
+    </svg>
+  ),
+  cheomseongdae: (
+    <svg width="140" height="90" viewBox="0 0 140 90">
+      <path d="M 45 80 L 53 20 L 87 20 L 95 80 Z" fill="#d7ccc8" stroke="#5d4037" strokeWidth="4"/>
+      <rect x="48" y="10" width="44" height="10" fill="#a1887f" stroke="#5d4037" strokeWidth="3"/>
+      <rect x="58" y="40" width="24" height="20" fill="#4e342e"/>
+    </svg>
+  ),
+  hanok: (
+    <svg width="140" height="90" viewBox="0 0 140 90">
+      <rect x="30" y="40" width="80" height="42" fill="#d7ccc8" stroke="#4e342e" strokeWidth="3"/>
+      <path d="M 15 40 C 35 20 105 20 125 40 Z" fill="#37474f" stroke="#212121" strokeWidth="4"/>
+      <rect x="55" y="52" width="30" height="30" fill="#8d6e63"/>
+    </svg>
+  ),
+  western: (
+    <svg width="140" height="90" viewBox="0 0 140 90">
+      <rect x="30" y="35" width="80" height="45" fill="#cfd8dc" stroke="#37474f" strokeWidth="3"/>
+      <rect x="40" y="42" width="12" height="38" fill="#90a4ae"/>
+      <rect x="64" y="42" width="12" height="38" fill="#90a4ae"/>
+      <rect x="88" y="42" width="12" height="38" fill="#90a4ae"/>
+      <polygon points="25,35 70,15 115,35" fill="#b0bec5" stroke="#37474f" strokeWidth="3"/>
+    </svg>
+  ),
+  dome: (
+    <svg width="140" height="90" viewBox="0 0 140 90">
+      <rect x="30" y="45" width="80" height="35" fill="#eceff1" stroke="#455a64" strokeWidth="3"/>
+      <path d="M 35 45 A 35 35 0 0 1 105 45 Z" fill="#26a69a" stroke="#00695c" strokeWidth="3"/>
+    </svg>
+  )
+};
+
+// GitHub 고화질 오픈 이미지 주소
+const POKEMON_URLS = {
+  pikachu: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
+  eevee: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png",
+  squirtle: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png"
+};
+
 const gameData = [
   {
     era: "고조선 (BC 2333년)",
@@ -11,8 +57,7 @@ const gameData = [
     rightOption: "세종대왕 / 훈민정음",
     answer: "left",
     buildingName: "고조선 고인돌 유적",
-    // 고화질 고인돌 이미지 URL
-    buildingImg: "https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?auto=format&fit=crop&w=600&q=80"
+    buildingKey: "dolmen"
   },
   {
     era: "삼국시대 (BC 57년~)",
@@ -21,8 +66,7 @@ const gameData = [
     rightOption: "삼국시대",
     answer: "right",
     buildingName: "신라 첨성대 관측소",
-    // 고화질 첨성대 이미지 URL
-    buildingImg: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80"
+    buildingKey: "cheomseongdae"
   },
   {
     era: "고려시대 (918년)",
@@ -30,9 +74,8 @@ const gameData = [
     leftOption: "고려",
     rightOption: "대한민국",
     answer: "left",
-    buildingName: "고려 전통 한옥 궁궐",
-    // 고화질 고려/조선 한옥 URL
-    buildingImg: "https://images.unsplash.com/photo-1548115184-bc6544d06a58?auto=format&fit=crop&w=600&q=80"
+    buildingName: "만월대 고려 황궁",
+    buildingKey: "hanok"
   },
   {
     era: "조선시대 (1392년)",
@@ -41,7 +84,7 @@ const gameData = [
     rightOption: "조선",
     answer: "right",
     buildingName: "경복궁 대청마루",
-    buildingImg: "https://images.unsplash.com/photo-1538669715315-056efee0be88?auto=format&fit=crop&w=600&q=80"
+    buildingKey: "hanok"
   },
   {
     era: "대한제국 (1897년)",
@@ -50,7 +93,7 @@ const gameData = [
     rightOption: "고조선",
     answer: "left",
     buildingName: "덕수궁 석조전",
-    buildingImg: "https://images.unsplash.com/photo-1578637387939-43c525550085?auto=format&fit=crop&w=600&q=80"
+    buildingKey: "western"
   },
   {
     era: "대한민국 (1948년)",
@@ -58,26 +101,10 @@ const gameData = [
     leftOption: "삼국시대",
     rightOption: "대한민국",
     answer: "right",
-    buildingName: "대한민국 현대 의사당 돔",
-    buildingImg: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80"
-  },
-  {
-    era: "6·25 전쟁 (1950년)",
-    question: "한반도의 평화와 자유를 소중하게 지켜낸 역사적 사건은?",
-    leftOption: "6·25 평화 수호",
-    rightOption: "임진왜란",
-    answer: "left",
-    buildingName: "평화 수호 기념관",
-    buildingImg: "https://images.unsplash.com/photo-1541872703-74c5e44368f9?auto=format&fit=crop&w=600&q=80"
+    buildingName: "대한민국 국회의사당 돔",
+    buildingKey: "dome"
   }
 ];
-
-// PokeAPI 오픈 에셋 (공식 고화질 포켓몬 아트워크 핫링크)
-const POKEMON_ASSETS = {
-  pikachu: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
-  eevee: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png",
-  squirtle: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png"
-};
 
 export default function App() {
   const [index, setIndex] = useState(0);
@@ -99,10 +126,9 @@ export default function App() {
       if (isCorrect) {
         setScore(prev => prev + 1);
         
-        // 정답 축하 폭죽 효과
         confetti({
-          particleCount: 120,
-          spread: 100,
+          particleCount: 110,
+          spread: 90,
           origin: { y: 0.6 }
         });
 
@@ -135,7 +161,7 @@ export default function App() {
 
   return (
     <div className="game-container">
-      {/* 상단 퀴즈 정보 */}
+      {/* 상단 퀴즈 헤더 */}
       <header className="hud-top">
         <div className="era-badge">📜 {currentQ?.era}</div>
         <div className="question-box">
@@ -150,35 +176,26 @@ export default function App() {
       {/* 메인 2.5D 그래픽 영역 */}
       <main className="stage-wrapper">
         <div className="building-card">
-          <img 
-            src={currentQ?.buildingImg} 
-            alt="건물" 
-            className="building-img"
-          />
+          <div className="building-svg-wrapper">
+            {BuildingVisuals[currentQ?.buildingKey]}
+          </div>
           <div className="building-title">🏛️ {currentQ?.buildingName}</div>
         </div>
 
         <div className="track-line">
-          {/* 공식 이브이 아트워크 */}
-          <img 
-            src={POKEMON_ASSETS.eevee} 
-            className="side-pokemon left" 
-            alt="이브이" 
-          />
+          {/* 이브이 이미지 */}
+          <div className="side-pokemon left">
+            <img src={POKEMON_URLS.eevee} alt="이브이" />
+          </div>
 
-          {/* 공식 꼬부기 아트워크 */}
-          <img 
-            src={POKEMON_ASSETS.squirtle} 
-            className="side-pokemon right" 
-            alt="꼬부기" 
-          />
+          {/* 꼬부기 이미지 */}
+          <div className="side-pokemon right">
+            <img src={POKEMON_URLS.squirtle} alt="꼬부기" />
+          </div>
 
-          {/* 메인 피카츄 아트워크 */}
+          {/* 주인공 피카츄 이미지 */}
           <div className={`hero-pikachu ${pikachuPos}`}>
-            <img 
-              src={POKEMON_ASSETS.pikachu} 
-              alt="피카츄" 
-            />
+            <img src={POKEMON_URLS.pikachu} alt="피카츄" />
           </div>
         </div>
       </main>
@@ -202,7 +219,7 @@ export default function App() {
         </button>
       </footer>
 
-      {/* 게임 완료 모달 */}
+      {/* 완공 모달 */}
       {isFinished && (
         <div className="victory-modal active">
           <div className="victory-card">
