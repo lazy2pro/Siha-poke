@@ -1,14 +1,17 @@
-# Unity 생성 임시 파일 및 캐시 제외
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Uu]ser[Ss]ettings/
+# Dependencies and generated output
+node_modules/
+dist/
+*.tsbuildinfo
 
-# Visual Studio / IDE 설정 파일
-/.vs/
-/*.csproj
-/*.unityproj
-/*.sln
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Vercel's local project metadata
+.vercel/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
